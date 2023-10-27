@@ -1,10 +1,16 @@
 name: Deploy to dev
 on:
   workflow_call:
+    inputs:
+      cluster:
+        required: false
+        type: string
+        default: gcp
+        description: Skal enten være gcp eller fss
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+  CLUSTER: dev-${{ inputs.cluster }}
 jobs:
   build:
     if: github.event.pull_request.draft == false
@@ -60,11 +66,11 @@ jobs:
       - uses: actions/checkout@v4
         with:
           path: deploy
-      - name: Deploy main branch to dev-gcp
+      - name: Deploy to ${{ env.CLUSTER }} with main.yaml
         uses: nais/deploy/actions/deploy@v1
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
-          CLUSTER: dev-gcp
+          CLUSTER: ${{ env.CLUSTER }}
           RESOURCE: deploy/.nais/nais.yaml
           VARS: deploy/.nais/main.yaml
           IMAGE: ${{ needs.build.outputs.image }}

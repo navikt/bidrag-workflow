@@ -1,8 +1,15 @@
 name: Deploy to prod
 on:
   workflow_call:
+    inputs:
+      cluster:
+        required: false
+        type: string
+        default: gcp
+        description: Skal enten være gcp eller fss
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  CLUSTER: prod-${{ inputs.cluster }}
 
 jobs:
   build:
@@ -43,7 +50,7 @@ jobs:
       - uses: nais/deploy/actions/deploy@v1
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
-          CLUSTER: prod-gcp
+          CLUSTER: ${{ env.CLUSTER }}
           RESOURCE: deploy/.nais/nais.yaml
           VARS: deploy/.nais/prod.yaml
           IMAGE: ${{ needs.build.outputs.image }}

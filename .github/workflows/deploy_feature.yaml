@@ -1,9 +1,7 @@
 name: Deploy feature
 on:
   workflow_call:
-    secrets:
-      token:
-        required: true
+
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

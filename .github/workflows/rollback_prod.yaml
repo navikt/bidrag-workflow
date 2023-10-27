@@ -1,9 +1,6 @@
 name: Rollback prod to previous version
 on:
   workflow_call:
-    secrets:
-      token:
-        required: true
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

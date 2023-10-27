@@ -10,9 +10,6 @@ env:
 
 jobs:
   prepare_deploy:
-    permissions:
-      contents: "read"
-      id-token: "write"
     runs-on: ubuntu-latest
     name: Find tag to deploy
 

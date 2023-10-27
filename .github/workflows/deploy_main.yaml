@@ -1,4 +1,4 @@
-name: Deploy feature
+name: Deploy to dev
 on:
   workflow_call:
 
@@ -7,6 +7,7 @@ env:
 
 jobs:
   build:
+    if: github.event.pull_request.draft == false
     name: Build with maven and docker
     runs-on: ubuntu-latest
     steps:
@@ -23,6 +24,7 @@ jobs:
             ${{ runner.os }}-maven-
       - run: mvn -Dmaven.test.skip=true -B -e clean install
       - uses: nais/docker-build-push@v0
+        if: ${{ github.actor != 'dependabot[bot]' }}
         id: docker-push
         with:
           team: bidrag
@@ -49,21 +51,20 @@ jobs:
             ${{ runner.os }}-maven-
       - run: mvn test
 
-  deploy-feature:
+  deploy-main:
     runs-on: ubuntu-latest
-    name: Deploy feature
-    if: github.actor != 'dependabot[bot]'
+    name: Deploy main
     needs: build
-
+    if: github.actor != 'dependabot[bot]'
     steps:
       - uses: actions/checkout@v4
         with:
           path: deploy
-      - name: Deploy to dev-gcp for feature.yaml
+      - name: Deploy main branch to dev-gcp
         uses: nais/deploy/actions/deploy@v1
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-gcp
           RESOURCE: deploy/.nais/nais.yaml
-          VARS: deploy/.nais/feature.yaml
+          VARS: deploy/.nais/main.yaml
           IMAGE: ${{ needs.build.outputs.image }}

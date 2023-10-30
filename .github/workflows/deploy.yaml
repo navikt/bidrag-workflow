@@ -1,0 +1,120 @@
+name: Deploy
+on:
+  workflow_call:
+    inputs:
+      production:
+        required: false
+        type: boolean
+        default: false
+        description: Skal være true hvis det skal deployes til produksjon
+      cluster:
+        required: false
+        type: string
+        default: gcp
+        description: Skal enten være gcp eller fss
+      nais_vars_file_name:
+        required: true
+        type: string
+        default: feature
+        description: Navnet på miljøvariabler filen som skal brukes ved deploy
+    outputs:
+      image:
+        description: "Docker Image navnet som blir deployet til miljø"
+        value: ${{ jobs.build.outputs.image }}
+      tag:
+        description: "Docker tag som blir deployet til miljø"
+        value: ${{ jobs.build.outputs.tag }}
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  CLUSTER: ${{ inputs.production && 'prod' || 'dev' }}-${{ inputs.cluster }}
+
+jobs:
+  build:
+    name: Build with maven and docker
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      - uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      - name: Bygg uten test
+        if: ${{ inputs.production == false }}
+        run: mvn -Dmaven.test.skip=true -B -e clean install
+      - name: Bygg med test
+        if: ${{ inputs.production == true }}
+        run: mvn -B -e clean install
+      - uses: nais/docker-build-push@v0
+        id: docker-push
+        with:
+          team: bidrag
+          identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
+          project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
+    outputs:
+      image: ${{ steps.docker-push.outputs.image }}
+      tag: ${{ steps.docker-push.outputs.tag }}
+
+  run-tests:
+    runs-on: ubuntu-latest
+    name: Run tests
+    if: ${{ inputs.production == false }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      - uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      - run: mvn test
+
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deploy ${{ inputs.nais_vars_file_name }}
+    if: github.actor != 'dependabot[bot]'
+    needs: build
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: deploy
+      - name: Deploy to ${{ env.CLUSTER }} with ${{ inputs.nais_vars_file_name }}.yaml
+        uses: nais/deploy/actions/deploy@v1
+        env:
+          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+          CLUSTER: ${{ env.CLUSTER }}
+          RESOURCE: deploy/.nais/nais.yaml
+          VARS: deploy/.nais/${{ inputs.nais_vars_file_name }}.yaml
+          IMAGE: ${{ needs.build.outputs.image }}
+
+  tag:
+    runs-on: ubuntu-latest
+    name: Tag release
+    if: ${{ inputs.production == true }}
+    permissions:
+      contents: write
+    needs: deploy
+    steps:
+      - uses: actions/checkout@v4
+      - name: Push latest image tag as github tag
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v6.1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          custom_tag: ${{ needs.deploy.outputs.tag }}
+      - name: Create a GitHub release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ steps.tag_version.outputs.new_tag }}
+          name: Release ${{ steps.tag_version.outputs.new_tag }}
+          body: ${{ steps.tag_version.outputs.changelog }}

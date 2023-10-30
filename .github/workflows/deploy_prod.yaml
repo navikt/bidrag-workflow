@@ -1,0 +1,42 @@
+name: Deploy
+on:
+  workflow_call:
+    inputs:
+      cluster:
+        required: false
+        type: string
+        default: gcp
+        description: Skal enten være gcp eller fss
+      nais_vars_file_name:
+        required: false
+        type: string
+        default: prod
+        description: Navnet på miljøvariabler filen som skal brukes ved deploy
+    outputs:
+      image:
+        description: "Docker Image navnet som blir deployet til miljø"
+        value: ${{ jobs.build_and_deploy.outputs.image }}
+      tag:
+        description: "Docker tag som blir deployet til miljø"
+        value: ${{ jobs.build_and_deploy.outputs.tag }}
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  CLUSTER: prod-${{ inputs.cluster }}
+
+jobs:
+  build_and_deploy:
+    name: "Build and deploy to production"
+    uses: ./.github/workflows/deploy.yaml
+    with:
+      nais_vars_file_name: ${{ inputs.nais_vars_file_name }}
+      cluster: ${{ inputs.cluster }}
+      production: true
+    secrets: inherit
+
+  tag:
+    name: "Tag release"
+    needs: build_and_deploy
+    uses: ./.github/workflows/tag_release.yaml
+    with:
+      tag: ${{ needs.build_and_deploy.outputs.tag }}
+    secrets: inherit

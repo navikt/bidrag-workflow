@@ -1,3 +1,4 @@
+## Deprecated, use deploy.yaml
 name: Deploy feature
 on:
   workflow_call:

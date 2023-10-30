@@ -1,3 +1,4 @@
+## Deprecated, use deploy_prod.yaml
 name: Deploy to prod
 on:
   workflow_call:

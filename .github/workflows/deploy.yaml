@@ -13,11 +13,14 @@ on:
         default: gcp
         description: Skal enten være gcp eller fss
       nais_vars_file_name:
-        required: true
+        required: false
         type: string
         default: feature
         description: Navnet på miljøvariabler filen som skal brukes ved deploy
     outputs:
+      deploy_success:
+        description: "Om deploy har gått gjennom OK"
+        value: ${{ jobs.deploy.outputs.deploy_success }}
       image:
         description: "Docker Image navnet som blir deployet til miljø"
         value: ${{ jobs.build.outputs.image }}
@@ -96,25 +99,7 @@ jobs:
           RESOURCE: deploy/.nais/nais.yaml
           VARS: deploy/.nais/${{ inputs.nais_vars_file_name }}.yaml
           IMAGE: ${{ needs.build.outputs.image }}
-
-  tag:
-    runs-on: ubuntu-latest
-    name: Tag release
-    if: ${{ inputs.production == true }}
-    permissions:
-      contents: write
-    needs: deploy
-    steps:
-      - uses: actions/checkout@v4
-      - name: Push latest image tag as github tag
-        id: tag_version
-        uses: mathieudutour/github-tag-action@v6.1
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          custom_tag: ${{ needs.deploy.outputs.tag }}
-      - name: Create a GitHub release
-        uses: ncipollo/release-action@v1
-        with:
-          tag: ${{ steps.tag_version.outputs.new_tag }}
-          name: Release ${{ steps.tag_version.outputs.new_tag }}
-          body: ${{ steps.tag_version.outputs.changelog }}
+      - id: generate_outputs
+        run: echo "deploy_success=true" >> $GITHUB_OUTPUT
+    outputs:
+      deploy_success: ${{ steps.generate_outputs.outputs.deploy_success }}

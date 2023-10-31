@@ -2,11 +2,20 @@ name: Rollback prod to previous version
 on:
   workflow_call:
     inputs:
+      nais_variabler_filnavn:
+        required: false
+        type: string
+        default: prod.yaml
+        description: Navnet på miljøvariabler filen som skal brukes ved deploy. Parameter skal inkludere filending som feks .yaml
       cluster:
         required: false
         type: string
         default: gcp
         description: Skal enten være gcp eller fss
+      deploy_tag:
+        required: false
+        type: string
+        description: Release tag som skal deployes. Som default vil forrige tag bli deployet
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   CLUSTER: prod-${{ inputs.cluster }}
@@ -31,8 +40,8 @@ jobs:
           git fetch --all --tags
           echo ${GITHUB_EVENT_NAME}
           REPO_NAME=${{github.event.repository.name}}
-          DEPLOY_TAG=${{ github.event.inputs.deploy_tag }}
-          if [ -z "$INPUT_TAG" ]; then 
+          DEPLOY_TAG=${{ inputs.deploy_tag }}
+          if [ -z "$DEPLOY_TAG" ]; then 
            echo "NULL";
            DEPLOY_TAG=$(git tag -l | sort -V | tail -2 | head -1)
           fi
@@ -44,7 +53,7 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-    name: Deploy docker image to prod
+    name: Deploy docker image to prod with variables from file ${{ inputs.nais_variabler_filnavn }}
     needs: prepare_deploy
 
     steps:
@@ -53,6 +62,6 @@ jobs:
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: ${{ env.CLUSTER }}
-          RESOURCE: deploy/.nais/nais.yaml
-          VARS: deploy/.nais/prod.yaml
+          RESOURCE: .nais/nais.yaml
+          VARS: .nais/${{ inputs.nais_variabler_filnavn }}
           IMAGE: ${{ needs.prepare_deploy.outputs.image }}

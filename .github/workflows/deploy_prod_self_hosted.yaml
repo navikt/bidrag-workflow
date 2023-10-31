@@ -2,11 +2,11 @@ name: Deploy feature
 on:
   workflow_call:
     inputs:
-      nais_vars_file_name:
+      nais_variabler_filnavn:
         required: true
         type: string
-        default: feature
-        description: Navnet på miljøvariabler filen som skal brukes ved deploy
+        default: feature.yaml
+        description: Navnet på miljøvariabler filen som skal brukes ved deploy med filending
     outputs:
       image:
         description: "Docker Image navnet som blir deployet til miljø"
@@ -14,23 +14,20 @@ on:
       tag:
         description: "Docker tag som blir deployet til miljø"
         value: ${{ jobs.build.outputs.tag }}
-env:
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  ENV_FILE_NAME: ${{ inputs.nais_vars_file_name }}
 
 jobs:
   build_and_deploy:
     name: "Build and deploy to production"
     uses: ./.github/workflows/deploy_self_hosted.yaml
     with:
-      nais_vars_file_name: ${{ inputs.nais_vars_file_name }}
-      production: true
+      nais_variabler_filnavn: ${{ inputs.nais_variabler_filnavn }}
+      produksjon: true
     secrets: inherit
 
   tag:
     name: "Tag release"
     needs: build_and_deploy
-    if: ${{ always()  && needs.build_and_deploy.outputs.deploy_success == 'true' }}
+    if: ${{ always() && needs.build_and_deploy.outputs.deploy_suksess == 'true' }}
     uses: ./.github/workflows/tag_release.yaml
     with:
       tag: ${{ needs.build_and_deploy.outputs.tag }}

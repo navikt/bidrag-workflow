@@ -2,6 +2,11 @@ name: Deploy
 on:
   workflow_call:
     inputs:
+      java-version:
+        required: false
+        type: string
+        default: 17
+        description: Hvilken versjon av java applikasjonen skal bygges med
       nais_cluster:
         required: false
         type: string
@@ -28,6 +33,7 @@ jobs:
       nais_variabler_filnavn: ${{ inputs.nais_variabler_filnavn }}
       nais_cluster: ${{ inputs.nais_cluster }}
       produksjon: true
+      java-version: ${{ inputs.java-version }}
     secrets: inherit
 
   tag:

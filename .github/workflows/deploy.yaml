@@ -2,6 +2,11 @@ name: Deploy
 on:
   workflow_call:
     inputs:
+      java-version:
+        required: false
+        type: string
+        default: 17
+        description: Hvilken versjon av java applikasjonen skal bygges med
       produksjon:
         required: false
         type: boolean
@@ -39,7 +44,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v3
         with:
-          java-version: '17'
+          java-version: ${{ inputs.java-version }}
           distribution: 'temurin'
       - uses: actions/cache@v3
         with:
@@ -72,7 +77,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v3
         with:
-          java-version: '17'
+          java-version: ${{ inputs.java-version }}
           distribution: 'temurin'
       - uses: actions/cache@v3
         with:

@@ -5,7 +5,7 @@ on:
       java-version:
         required: false
         type: string
-        default: 17
+        default: 21
         description: Hvilken versjon av java applikasjonen skal bygges med
       produksjon:
         required: false
@@ -22,6 +22,11 @@ on:
         type: string
         default: feature.yaml
         description: Navnet på miljøvariabler filen som skal brukes ved deploy. Parameter skal inkludere filending som feks .yaml
+      maven_options:
+        required: false
+        type: string
+        default: -B -q -fae
+        description: Ekstra options ved kjøring av maven bygget. Dette kan være lag eller profiler. Default -B (Batchmode, non-interactive), -q (Quiet, kun logging ved errors), -fae (Fail at end).
     outputs:
       deploy_suksess:
         description: "Om deploy har gått gjennom OK"
@@ -54,10 +59,10 @@ jobs:
             ${{ runner.os }}-maven-
       - name: Bygg uten test
         if: ${{ inputs.produksjon == false }}
-        run: mvn -Dmaven.test.skip=true -B -e clean install
+        run: mvn -Dmaven.test.skip=true ${{ inputs.maven_options }} clean install
       - name: Bygg med test
         if: ${{ inputs.produksjon == true }}
-        run: mvn -B -e clean install
+        run: mvn ${{ inputs.maven_options }} clean install
       - uses: nais/docker-build-push@v0
         if: github.actor != 'dependabot[bot]'
         id: docker-push
@@ -85,7 +90,7 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
-      - run: mvn test
+      - run: mvn ${{ inputs.maven_options }} test
 
   deploy:
     runs-on: ubuntu-latest

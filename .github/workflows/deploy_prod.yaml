@@ -5,7 +5,7 @@ on:
       java-version:
         required: false
         type: string
-        default: 17
+        default: 21
         description: Hvilken versjon av java applikasjonen skal bygges med
       nais_cluster:
         required: false
@@ -17,6 +17,11 @@ on:
         type: string
         default: prod.yaml
         description: Navnet på miljøvariabler filen som skal brukes ved deploy med filending
+      maven_options:
+        required: false
+        type: string
+        default: -B -q -fae
+        description: Ekstra options ved kjøring av maven bygget. Dette kan være lag eller profiler. Default -B (Batchmode, non-interactive), -q (Quiet, kun logging ved errors), -fae (Fail at end).
     outputs:
       image:
         description: "Docker image som blir deployet til miljø"
@@ -34,6 +39,7 @@ jobs:
       nais_cluster: ${{ inputs.nais_cluster }}
       produksjon: true
       java-version: ${{ inputs.java-version }}
+      maven_options: ${{ inputs.maven_options }}
     secrets: inherit
 
   tag:

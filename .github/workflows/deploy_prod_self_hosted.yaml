@@ -7,6 +7,11 @@ on:
         type: string
         default: feature.yaml
         description: Navnet på miljøvariabler filen som skal brukes ved deploy med filending
+      maven_options:
+        required: false
+        type: string
+        default: -B -q -fae
+        description: Ekstra options ved kjøring av maven bygget. Dette kan være lag eller profiler. Default -B (Batchmode, non-interactive), -q (Quiet, kun logging ved errors), -fae (Fail at end).
     outputs:
       image:
         description: "Docker Image navnet som blir deployet til miljø"
@@ -21,6 +26,7 @@ jobs:
     uses: ./.github/workflows/deploy_self_hosted.yaml
     with:
       nais_variabler_filnavn: ${{ inputs.nais_variabler_filnavn }}
+      maven_options: ${{ inputs.maven_options }}
       produksjon: true
     secrets: inherit
 

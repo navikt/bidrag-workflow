@@ -55,16 +55,20 @@ jobs:
           retention-days: 1
 
   run-tests:
-    name: Run tests
+    name: Kjør tester
     if: ${{ inputs.produksjon == false }}
     runs-on: self-hosted
-
     steps:
       - uses: actions/checkout@v4
-      - name: Kjørt tester
-        run: mvn ${{ inputs.maven_options }} test
-      - name: Verifiser formatering med ktlint
-        run: mvn antrun:run@ktlint
+      - run: mvn ${{ inputs.maven_options }} test
+
+  run-ktlint:
+    name: Verifiser formatering med ktlint
+    if: ${{ inputs.produksjon == false }}
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v4
+      - run: mvn antrun:run@ktlint
 
   publish_to_docker:
     name: Publish to docker

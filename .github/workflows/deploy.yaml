@@ -90,8 +90,10 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
-      - run: mvn ${{ inputs.maven_options }} test
-
+      - name: Kjørt tester
+        run: mvn ${{ inputs.maven_options }} test
+      - name: Verifiser formatering med ktlint
+        run: mvn antrun:run@ktlint
   deploy:
     runs-on: ubuntu-latest
     name: Deploy ${{ inputs.nais_variabler_filnavn }}

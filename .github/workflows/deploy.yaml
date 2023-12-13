@@ -27,6 +27,11 @@ on:
         type: string
         default: -B -q -fae
         description: Ekstra options ved kjøring av maven bygget. Dette kan være lag eller profiler. Default -B (Batchmode, non-interactive), -q (Quiet, kun logging ved errors), -fae (Fail at end).
+      maven_test_lifecycle:
+        required: false
+        type: string
+        default: test
+        description: Mulighet for å endre hvilken maven lifecycle som kjøres sammen med testene. For å kunne kjøre integrasjonstester må verify/install/deploy brukes.
     outputs:
       deploy_suksess:
         description: "Om deploy har gått gjennom OK"
@@ -90,7 +95,7 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
-      - run: mvn ${{ inputs.maven_options }} test
+      - run: mvn ${{ inputs.maven_options }} ${{ inputs.maven_test_lifecycle }}
 
   run-ktlint:
     runs-on: ubuntu-latest

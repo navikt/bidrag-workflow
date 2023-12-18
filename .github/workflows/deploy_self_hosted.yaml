@@ -47,7 +47,7 @@ jobs:
         run: mvn ${{ inputs.maven_options }} clean install
       - name: Rename jar file
         run: cp ./target/${{ github.event.repository.name }}-*.jar ./target/app.jar
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         if: github.actor != 'dependabot[bot]'
         with:
           name: buildfiles

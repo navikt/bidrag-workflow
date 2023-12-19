@@ -41,10 +41,14 @@ jobs:
       - uses: actions/checkout@v4
       - name: Bygg uten test
         if: ${{ inputs.produksjon == false }}
-        run: mvn -Dmaven.test.skip=true ${{ inputs.maven_options }} clean install
+        run: |
+          export JAVA_HOME=/home/githubrunner/java-21
+          mvn -Dmaven.test.skip=true ${{ inputs.maven_options }} clean install
       - name: Bygg med test
         if: ${{ inputs.produksjon == true }}
-        run: mvn ${{ inputs.maven_options }} clean install
+        run: |
+          export JAVA_HOME=/home/githubrunner/java-21
+          mvn ${{ inputs.maven_options }} clean install
       - name: Rename jar file
         run: cp ./target/${{ github.event.repository.name }}-*.jar ./target/app.jar
       - uses: actions/upload-artifact@v3
@@ -60,7 +64,9 @@ jobs:
     runs-on: self-hosted
     steps:
       - uses: actions/checkout@v4
-      - run: mvn ${{ inputs.maven_options }} test
+      - run: |
+          export JAVA_HOME=/home/githubrunner/java-21
+          mvn ${{ inputs.maven_options }} test
 
   run-ktlint:
     name: Verifiser formatering med ktlint
@@ -68,7 +74,9 @@ jobs:
     runs-on: self-hosted
     steps:
       - uses: actions/checkout@v4
-      - run: mvn antrun:run@ktlint
+      - run: |
+          export JAVA_HOME=/home/githubrunner/java-21
+          mvn antrun:run@ktlint
 
   publish_to_docker:
     name: Publish to docker

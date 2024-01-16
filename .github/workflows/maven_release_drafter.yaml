@@ -33,13 +33,11 @@ jobs:
           server-password: GITHUB_TOKEN
           server-username: GITHUB_USERNAME
           server-id: github
-      - name: Log Settings.xml
-        run: cat ~/.m2/settings.xml
       - name: Resolve/Update Dependencies
-        run: mvn --settings ~/.m2/settings.xml -B -q -fae -Dmaven.test.skip=true package dependency:resolve-plugins dependency:go-offline
+        run: mvn -B -q -fae -Dmaven.test.skip=true package dependency:resolve-plugins dependency:go-offline
 
       - name: Build (and run tests)
-        run: mvn --settings ~/.m2/settings.xml -B -q -fae clean install
+        run: mvn -B -q -fae clean install
 
       - name: Save test results
         run: |

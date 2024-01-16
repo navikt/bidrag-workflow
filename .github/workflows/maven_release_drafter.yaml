@@ -89,7 +89,7 @@ jobs:
       id-token: "write"
       packages: "write"
     name: Publish package
-    uses: ./.github/workflows/publish_dispatcher.yaml
+    uses: ./.github/workflows/maven_publish.yaml
     with:
       version: ${{ needs.update_release_draft.outputs.version }}
     secrets: inherit

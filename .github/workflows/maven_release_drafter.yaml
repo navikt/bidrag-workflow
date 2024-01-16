@@ -1,4 +1,4 @@
-name: Release Drafter
+name: Maven release drafter
 
 on:
   workflow_call:

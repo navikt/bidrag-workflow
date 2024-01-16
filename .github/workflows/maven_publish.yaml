@@ -1,0 +1,32 @@
+name: Release maven package
+on:
+  workflow_call:
+    inputs:
+      version:
+        required: true
+        type: string
+        description: Versjon på pakken som skal publiseres
+env:
+  GITHUB_USERNAME: x-access-token
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          java-version: 21
+          distribution: 'temurin'
+          cache: 'maven'
+          server-password: GITHUB_TOKEN
+          server-username: GITHUB_USERNAME
+          server-id: github
+      - name: Setting version
+        run: |
+          mvn versions:set -DnewVersion="${{ inputs.version }}"
+          mvn versions:commit
+      - name: Deploy to Github Package
+        run: |
+          echo "Release package with version ${{ inputs.version }}"
+          mvn source:jar-no-fork deploy -DskipTests=true -Dmaven.wagon.http.pool=false -DdeployAtEnd=true

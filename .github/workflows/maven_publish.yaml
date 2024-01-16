@@ -6,7 +6,9 @@ on:
         required: true
         type: string
         description: Versjon på pakken som skal publiseres
-
+env:
+  GITHUB_USERNAME: x-access-token
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -17,7 +19,9 @@ jobs:
           java-version: 21
           distribution: 'temurin'
           cache: 'maven'
-
+          server-password: ${{env.GITHUB_TOKEN}}
+          server-username: ${{env.GITHUB_USERNAME}}
+          server-id: github
       - name: Setting version
         run: |
           mvn versions:set -DnewVersion="${{ inputs.version }}"
@@ -28,4 +32,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo "Release package with version ${{ inputs.version }}"
-          mvn --settings ./.github/.m2/maven-settings.xml source:jar-no-fork deploy -DskipTests=true -Dmaven.wagon.http.pool=false -DdeployAtEnd=true
+          mvn source:jar-no-fork deploy -DskipTests=true -Dmaven.wagon.http.pool=false -DdeployAtEnd=true

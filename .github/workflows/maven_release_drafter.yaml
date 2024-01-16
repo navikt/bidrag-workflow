@@ -30,8 +30,8 @@ jobs:
           java-version: 21
           distribution: 'temurin'
           cache: 'maven'
-          server-password: ${{env.GITHUB_TOKEN}}
-          server-username: ${{env.GITHUB_USERNAME}}
+          server-password: GITHUB_TOKEN
+          server-username: GITHUB_USERNAME
           server-id: github
       - name: Log Settings.xml
         run: cat ~/.m2/settings.xml

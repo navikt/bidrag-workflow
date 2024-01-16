@@ -28,4 +28,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo "Release package with version ${{ inputs.version }}"
-          mvn --settings .github/.m2/maven-settings.xml source:jar-no-fork deploy -DskipTests=true -Dmaven.wagon.http.pool=false -DdeployAtEnd=true
+          mvn --settings ./.github/.m2/maven-settings.xml source:jar-no-fork deploy -DskipTests=true -Dmaven.wagon.http.pool=false -DdeployAtEnd=true

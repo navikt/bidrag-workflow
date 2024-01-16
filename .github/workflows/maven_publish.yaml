@@ -19,17 +19,14 @@ jobs:
           java-version: 21
           distribution: 'temurin'
           cache: 'maven'
-          server-password: ${{env.GITHUB_TOKEN}}
-          server-username: ${{env.GITHUB_USERNAME}}
+          server-password: GITHUB_TOKEN
+          server-username: GITHUB_USERNAME
           server-id: github
       - name: Setting version
         run: |
           mvn versions:set -DnewVersion="${{ inputs.version }}"
           mvn versions:commit
       - name: Deploy to Github Package
-        env:
-          GITHUB_USERNAME: x-access-token
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo "Release package with version ${{ inputs.version }}"
           mvn source:jar-no-fork deploy -DskipTests=true -Dmaven.wagon.http.pool=false -DdeployAtEnd=true

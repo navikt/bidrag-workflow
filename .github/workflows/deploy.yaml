@@ -52,16 +52,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-java@v3
+      - uses: actions/setup-java@v4
         with:
           java-version: ${{ inputs.java-version }}
           distribution: 'temurin'
-      - uses: actions/cache@v3
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-
+          cache: "maven"
       - name: Bygg uten test
         if: ${{ inputs.produksjon == false }}
         run: mvn -Dmaven.test.skip=true ${{ inputs.maven_options }} clean install
@@ -85,16 +80,11 @@ jobs:
     if: ${{ inputs.produksjon == false }}
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-java@v3
+      - uses: actions/setup-java@v4
         with:
           java-version: ${{ inputs.java-version }}
           distribution: 'temurin'
-      - uses: actions/cache@v3
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-
+          cache: "maven"
       - run: mvn ${{ inputs.maven_options }} ${{ inputs.maven_test_lifecycle }}
 
   run-ktlint:
@@ -103,16 +93,11 @@ jobs:
     if: ${{ inputs.produksjon == false }}
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-java@v3
+      - uses: actions/setup-java@v4
         with:
           java-version: ${{ inputs.java-version }}
           distribution: 'temurin'
-      - uses: actions/cache@v3
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-
+          cache: "maven"
       - run: mvn antrun:run@ktlint
 
   deploy:
@@ -126,7 +111,7 @@ jobs:
         with:
           path: deploy
       - name: Deploy to ${{ env.CLUSTER }} with ${{ inputs.nais_variabler_filnavn }}
-        uses: nais/deploy/actions/deploy@v1
+        uses: nais/deploy/actions/deploy@v2
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: ${{ env.CLUSTER }}

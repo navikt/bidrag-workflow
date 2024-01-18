@@ -112,9 +112,8 @@ jobs:
         with:
           path: deploy
       - name: Deploy to ${{ env.CLUSTER }} with ${{ inputs.nais_variabler_filnavn }}
-        uses: nais/deploy/actions/deploy@v1
+        uses: nais/deploy/actions/deploy@v2
         env:
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: ${{ env.CLUSTER }}
           RESOURCE: deploy/.nais/nais.yaml
           VARS: deploy/.nais/${{ inputs.nais_variabler_filnavn }}

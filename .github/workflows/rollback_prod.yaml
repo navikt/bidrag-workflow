@@ -58,9 +58,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - uses: nais/deploy/actions/deploy@v1
+      - uses: nais/deploy/actions/deploy@v2
         env:
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: ${{ env.CLUSTER }}
           RESOURCE: .nais/nais.yaml
           VARS: .nais/${{ inputs.nais_variabler_filnavn }}

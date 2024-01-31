@@ -11,7 +11,9 @@ on:
       published:
         description: "Om pakken er publisert"
         value: ${{ jobs.publish.outputs.published }}
-
+      version:
+        description: "Versjon på pakken som ble publisert"
+        value: ${{ jobs.publish.outputs.version }}
 env:
   publish: ${{github.ref == 'refs/heads/main' && !startsWith(github.ref, 'refs/dependabot')}}
   GITHUB_USERNAME: x-access-token

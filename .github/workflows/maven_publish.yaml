@@ -10,6 +10,9 @@ on:
       published:
         description: "Om pakken er publisert"
         value: ${{ jobs.release.outputs.published }}
+      version:
+        description: "Versjon på pakken som ble publisert"
+        value: ${{ jobs.release.outputs.version }}
 env:
   GITHUB_USERNAME: x-access-token
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -35,6 +38,9 @@ jobs:
           echo "Release package with version ${{ inputs.version }}"
           mvn source:jar-no-fork deploy -DskipTests=true -Dmaven.wagon.http.pool=false -DdeployAtEnd=true
       - id: generate_outputs
-        run: echo "published=true" >> $GITHUB_OUTPUT
+        run: |
+          echo "published=true" >> $GITHUB_OUTPUT
+          echo "version=${{ inputs.version }}" >> $GITHUB_OUTPUT
     outputs:
       published: ${{ steps.generate_outputs.outputs.published }}
+      version: ${{ steps.generate_outputs.outputs.version }}

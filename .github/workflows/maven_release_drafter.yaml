@@ -7,6 +7,10 @@ on:
         required: true
         type: boolean
         description: Versjon på pakken som skal publiseres
+    outputs:
+      published:
+        description: "Om pakken er publisert"
+        value: ${{ jobs.publish.outputs.published }}
 
 env:
   publish: ${{github.ref == 'refs/heads/main' && !startsWith(github.ref, 'refs/dependabot')}}

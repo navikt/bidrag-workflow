@@ -124,6 +124,8 @@ jobs:
       deploy_suksess: ${{ steps.generate_outputs.outputs.deploy_suksess }}
 
   delete_artifacts:
+      permissions:
+        actions: "write"
       runs-on: ubuntu-latest
       name: Delete uploaded artifacts
       if: ${{ always() }}

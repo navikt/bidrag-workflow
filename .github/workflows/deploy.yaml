@@ -32,6 +32,10 @@ on:
         type: string
         default: test
         description: Mulighet for å endre hvilken maven lifecycle som kjøres sammen med testene. For å kunne kjøre integrasjonstester må verify/install/deploy brukes.
+      ktlint_options:
+        required: false
+        type: string
+        description: Ektra parametere ved kjøring av ktlint.
     outputs:
       deploy_suksess:
         description: "Om deploy har gått gjennom OK"
@@ -113,7 +117,7 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
-      - run: mvn antrun:run@ktlint
+      - run: mvn antrun:run@ktlint ${{ inputs.ktlint_options }}
 
   deploy:
     runs-on: ubuntu-latest

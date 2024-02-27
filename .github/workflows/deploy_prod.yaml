@@ -17,11 +17,30 @@ on:
         type: string
         default: prod.yaml
         description: Navnet på miljøvariabler filen som skal brukes ved deploy med filending
+      nais_hovedfil_navn:
+        required: false
+        type: string
+        default: nais.yaml
+        description: Navnet på nais filen som skal brukes. Parameter skal inkludere filending og evt path om det ikke ligger på root i .nais folder.
       maven_options:
         required: false
         type: string
         default: -B -q -fae
         description: Ekstra options ved kjøring av maven bygget. Dette kan være lag eller profiler. Default -B (Batchmode, non-interactive), -q (Quiet, kun logging ved errors), -fae (Fail at end).
+      ktlint_options:
+        required: false
+        type: string
+        description: Ektra parametere ved kjøring av ktlint.
+      dockerfile_with_path:
+        required: false
+        type: string
+        default: Dockerfile
+        description: Kan settes for å spesifisere path for dockerfile.
+      docker_context:
+        required: false
+        type: string
+        default: .
+        description: Kan settes for å spesifisere docker context for build files.
     outputs:
       image:
         description: "Docker image som blir deployet til miljø"
@@ -40,6 +59,10 @@ jobs:
       produksjon: true
       java-version: ${{ inputs.java-version }}
       maven_options: ${{ inputs.maven_options }}
+      nais_hovedfil_navn: ${{ inputs.nais_hovedfil_navn }}
+      ktlint_options: ${{ inputs.ktlint_options }}
+      dockerfile_with_path: ${{ inputs.dockerfile_with_path }}
+      docker_context: ${{ inputs.docker_context }}
     secrets: inherit
 
   tag:

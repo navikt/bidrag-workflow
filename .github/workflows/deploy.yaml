@@ -41,6 +41,11 @@ on:
         type: string
         default: Dockerfile
         description: Kan settes for å spesifisere path for dockerfile.
+      docker_context:
+        required: false
+        type: string
+        default: .
+        description: Kan settes for å spesifisere docker context for build files.
     outputs:
       deploy_suksess:
         description: "Om deploy har gått gjennom OK"
@@ -85,6 +90,7 @@ jobs:
           identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
           project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
           dockerfile: ${{ inputs.dockerfile_with_path }}
+          docker_context: ${{ inputs.docker_context }}
     outputs:
       image: ${{ steps.docker-push.outputs.image }}
       tag: ${{ steps.docker-push.outputs.tag }}

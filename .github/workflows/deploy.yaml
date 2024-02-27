@@ -22,6 +22,11 @@ on:
         type: string
         default: feature.yaml
         description: Navnet på miljøvariabler filen som skal brukes ved deploy. Parameter skal inkludere filending som feks .yaml
+      nais_hovedfil_navn:
+        required: false
+        type: string
+        default: nais.yaml
+        description: Navnet på nais filen som skal brukes. Parameter skal inkludere filending og evt path om det ikke ligger på root i .nais folder.
       maven_options:
         required: false
         type: string
@@ -145,7 +150,7 @@ jobs:
         uses: nais/deploy/actions/deploy@v2
         env:
           CLUSTER: ${{ env.CLUSTER }}
-          RESOURCE: deploy/.nais/nais.yaml
+          RESOURCE: deploy/.nais/${{ inputs.nais_hovedfil_navn }}
           VARS: deploy/.nais/${{ inputs.nais_variabler_filnavn }}
           IMAGE: ${{ needs.build.outputs.image }}
       - id: generate_outputs

@@ -51,6 +51,10 @@ on:
         type: string
         default: .
         description: Kan settes for å spesifisere docker context for build files.
+      image_suffix:
+        required: false
+        type: string
+        description: Suffix for docker image om det er multimodul repo.
     outputs:
       deploy_suksess:
         description: "Om deploy har gått gjennom OK"
@@ -96,6 +100,7 @@ jobs:
           project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
           dockerfile: ${{ inputs.dockerfile_with_path }}
           docker_context: ${{ inputs.docker_context }}
+          image_suffix: ${{ inputs.image_suffix }}
     outputs:
       image: ${{ steps.docker-push.outputs.image }}
       tag: ${{ steps.docker-push.outputs.tag }}

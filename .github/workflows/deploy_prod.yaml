@@ -41,6 +41,10 @@ on:
         type: string
         default: .
         description: Kan settes for å spesifisere docker context for build files.
+      image_suffix:
+        required: false
+        type: string
+        description: Suffix for docker image om det er multimodul repo.
     outputs:
       image:
         description: "Docker image som blir deployet til miljø"
@@ -63,6 +67,7 @@ jobs:
       ktlint_options: ${{ inputs.ktlint_options }}
       dockerfile_with_path: ${{ inputs.dockerfile_with_path }}
       docker_context: ${{ inputs.docker_context }}
+      image_suffix: ${{ inputs.image_suffix }}
     secrets: inherit
 
   tag:

@@ -77,7 +77,11 @@ jobs:
           export JAVA_HOME=/home/githubrunner/java-21
           mvn ${{ inputs.maven_options }} clean install
       - name: Rename jar file
+        if: ${{ inputs.image_suffix == '' }}
         run: cp ./target/${{ github.event.repository.name }}-*.jar ./target/app.jar
+      - name: Rename jar file multimodule
+        if: ${{ inputs.image_suffix != '' }}
+        run: cp ./target/${{ inputs.image_suffix }}-*.jar ./target/app.jar
       - uses: actions/upload-artifact@v3
         if: github.actor != 'dependabot[bot]'
         with:

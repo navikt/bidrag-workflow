@@ -45,6 +45,10 @@ on:
         required: false
         type: string
         description: Suffix for docker image om det er multimodul repo.
+      tag:
+        required: false
+        type: string
+        description: Custom docker tag
     outputs:
       image:
         description: "Docker image som blir deployet til miljø"
@@ -68,6 +72,7 @@ jobs:
       dockerfile_with_path: ${{ inputs.dockerfile_with_path }}
       docker_context: ${{ inputs.docker_context }}
       image_suffix: ${{ inputs.image_suffix }}
+      tag: ${{ inputs.tag }}
     secrets: inherit
 
   tag:

@@ -55,6 +55,10 @@ on:
         required: false
         type: string
         description: Suffix for docker image om det er multimodul repo.
+      tag:
+        required: false
+        type: string
+        description: Custom docker tag
     outputs:
       deploy_suksess:
         description: "Om deploy har gått gjennom OK"
@@ -101,6 +105,7 @@ jobs:
           dockerfile: ${{ inputs.dockerfile_with_path }}
           docker_context: ${{ inputs.docker_context }}
           image_suffix: ${{ inputs.image_suffix }}
+          tag: ${{ inputs.tag }}
     outputs:
       image: ${{ steps.docker-push.outputs.image }}
       tag: ${{ steps.docker-push.outputs.tag }}

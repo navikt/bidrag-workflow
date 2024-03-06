@@ -12,6 +12,28 @@ on:
         type: string
         default: -B -q -fae
         description: Ekstra options ved kjøring av maven bygget. Dette kan være lag eller profiler. Default -B (Batchmode, non-interactive), -q (Quiet, kun logging ved errors), -fae (Fail at end).
+      ktlint_options:
+        required: false
+        type: string
+        description: Ektra parametere ved kjøring av ktlint.
+      dockerfile_with_path:
+        required: false
+        type: string
+        default: Dockerfile
+        description: Kan settes for å spesifisere path for dockerfile.
+      docker_context:
+        required: false
+        type: string
+        default: .
+        description: Kan settes for å spesifisere docker context for build files.
+      image_suffix:
+        required: false
+        type: string
+        description: Suffix for docker image om det er multimodul repo.
+      tag:
+        required: false
+        type: string
+        description: Custom docker tag
     outputs:
       image:
         description: "Docker Image navnet som blir deployet til miljø"
@@ -28,6 +50,11 @@ jobs:
       nais_variabler_filnavn: ${{ inputs.nais_variabler_filnavn }}
       maven_options: ${{ inputs.maven_options }}
       produksjon: true
+      ktlint_options: ${{ inputs.ktlint_options }}
+      dockerfile_with_path: ${{ inputs.dockerfile_with_path }}
+      docker_context: ${{ inputs.docker_context }}
+      image_suffix: ${{ inputs.image_suffix }}
+      tag: ${{ inputs.tag }}
     secrets: inherit
 
   tag:

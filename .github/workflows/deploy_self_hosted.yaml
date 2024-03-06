@@ -17,6 +17,28 @@ on:
         type: string
         default: -B -q -fae
         description: Ekstra options ved kjøring av maven bygget. Dette kan være lag eller profiler. Default -B (Batchmode, non-interactive), -q (Quiet, kun logging ved errors), -fae (Fail at end).
+      ktlint_options:
+        required: false
+        type: string
+        description: Ektra parametere ved kjøring av ktlint.
+      dockerfile_with_path:
+        required: false
+        type: string
+        default: Dockerfile
+        description: Kan settes for å spesifisere path for dockerfile.
+      docker_context:
+        required: false
+        type: string
+        default: .
+        description: Kan settes for å spesifisere docker context for build files.
+      image_suffix:
+        required: false
+        type: string
+        description: Suffix for docker image om det er multimodul repo.
+      tag:
+        required: false
+        type: string
+        description: Custom docker tag
     outputs:
       deploy_suksess:
         description: "Om deploy har gått gjennom OK"
@@ -76,7 +98,7 @@ jobs:
       - uses: actions/checkout@v4
       - run: |
           export JAVA_HOME=/home/githubrunner/java-21
-          mvn antrun:run@ktlint
+          mvn antrun:run@ktlint ${{ inputs.ktlint_options }}
 
   publish_to_docker:
     name: Publish to docker
@@ -97,6 +119,10 @@ jobs:
           team: bidrag
           identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
           project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
+          dockerfile: ${{ inputs.dockerfile_with_path }}
+          docker_context: ${{ inputs.docker_context }}
+          image_suffix: ${{ inputs.image_suffix }}
+          tag: ${{ inputs.tag }}
     outputs:
       image: ${{ steps.docker-push.outputs.image }}
       tag: ${{ steps.docker-push.outputs.tag }}

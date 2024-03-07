@@ -129,6 +129,7 @@ jobs:
         with:
           name: buildfiles
           path: ${{ inputs.image_suffix }}
+      - run: ls ${{ inputs.image_suffix }}
       - uses: nais/docker-build-push@v0
         id: docker-push
         with:

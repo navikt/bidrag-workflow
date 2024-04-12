@@ -89,12 +89,12 @@ jobs:
             [
               {
                 "id": "github",
-                "username": "${{env.GITHUB_ACTOR}}", 
+                "username": "x-access-token", 
                 "password": "${{secrets.GITHUB_TOKEN}}"
               },
               {
                 "id": "github2",
-                "username": "${{env.GITHUB_ACTOR}}", 
+                "username": "x-access-token", 
                 "password": "${{secrets.GITHUB_TOKEN}}"
               }
             ]
@@ -141,12 +141,12 @@ jobs:
             [
               {
                 "id": "github",
-                "username": "${{env.GITHUB_ACTOR}}", 
+                "username": "x-access-token", 
                 "password": "${{secrets.GITHUB_TOKEN}}"
               },
               {
                 "id": "github2",
-                "username": "${{env.GITHUB_ACTOR}}", 
+                "username": "x-access-token", 
                 "password": "${{secrets.GITHUB_TOKEN}}"
               }
             ]
@@ -174,12 +174,12 @@ jobs:
             [
               {
                 "id": "github",
-                "username": "${{env.GITHUB_ACTOR}}", 
+                "username": "x-access-token", 
                 "password": "${{secrets.GITHUB_TOKEN}}"
               },
               {
                 "id": "github2",
-                "username": "${{env.GITHUB_ACTOR}}", 
+                "username": "x-access-token", 
                 "password": "${{secrets.GITHUB_TOKEN}}"
               }
             ]

@@ -75,6 +75,7 @@ jobs:
         if: ${{ inputs.produksjon == true }}
         run: |
           export JAVA_HOME=/home/githubrunner/java-21
+          export MAVEN_HOME=/opt/apache-maven-3.9.9
           mvn ${{ inputs.maven_options }} clean install
       - name: Rename jar file
         if: ${{ inputs.image_suffix == '' }}

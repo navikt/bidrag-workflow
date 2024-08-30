@@ -70,6 +70,7 @@ jobs:
         if: ${{ inputs.produksjon == false }}
         run: |
           export JAVA_HOME=/home/githubrunner/java-21
+          export MAVEN_HOME=/opt/apache-maven-3.9.9
           mvn -Dmaven.test.skip=true ${{ inputs.maven_options }} clean install
       - name: Bygg med test
         if: ${{ inputs.produksjon == true }}

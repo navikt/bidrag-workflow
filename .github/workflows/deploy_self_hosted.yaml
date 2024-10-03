@@ -58,6 +58,7 @@ env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   CLUSTER: ${{ inputs.produksjon && 'prod-fss' || 'dev-fss' }}
   ENV_FILE_NAME: ${{ inputs.nais_variabler_filnavn }}
+  ACTIONS_RUNTIME_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
   build:

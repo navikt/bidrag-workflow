@@ -72,6 +72,7 @@ on:
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   CLUSTER: ${{ inputs.produksjon && 'prod' || 'dev' }}-${{ inputs.nais_cluster }}
+  ACTIONS_RUNTIME_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
   build:

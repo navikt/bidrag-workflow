@@ -114,6 +114,8 @@ jobs:
       - uses: nais/docker-build-push@v0
         if: github.actor != 'dependabot[bot]'
         id: docker-push
+        env:
+          TRIVY_JAVA_DB_REPOSITORY: "public.ecr.aws/aquasecurity/trivy-java-db:1"
         with:
           team: bidrag
           identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
@@ -122,6 +124,7 @@ jobs:
           docker_context: ${{ inputs.docker_context }}
           image_suffix: ${{ inputs.image_suffix }}
           tag: ${{ inputs.tag }}
+
     outputs:
       image: ${{ steps.docker-push.outputs.image }}
       tag: ${{ steps.docker-push.outputs.tag }}

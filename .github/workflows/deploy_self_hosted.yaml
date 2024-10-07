@@ -142,6 +142,8 @@ jobs:
       - run: ls ${{ inputs.image_suffix }}
       - uses: nais/docker-build-push@v0
         id: docker-push
+        env:
+          TRIVY_JAVA_DB_REPOSITORY: "public.ecr.aws/aquasecurity/trivy-java-db:1"
         with:
           team: bidrag
           identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}

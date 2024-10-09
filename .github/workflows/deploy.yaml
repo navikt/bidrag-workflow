@@ -84,6 +84,7 @@ jobs:
         with:
           java-version: ${{ inputs.java-version }}
           distribution: 'temurin'
+          cache: 'maven'
       - uses: s4u/maven-settings-action@v3.0.0
         with:
           servers: |
@@ -99,12 +100,6 @@ jobs:
                 "password": "${{secrets.GITHUB_TOKEN}}"
               }
             ]
-      - uses: actions/cache@v4
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-
       - name: Bygg uten test
         if: ${{ inputs.produksjon == false }}
         run: mvn -Dmaven.test.skip=true ${{ inputs.maven_options }} clean install
@@ -139,6 +134,7 @@ jobs:
         with:
           java-version: ${{ inputs.java-version }}
           distribution: 'temurin'
+          cache: 'maven'
       - uses: s4u/maven-settings-action@v3.0.0
         with:
           servers: |
@@ -172,6 +168,7 @@ jobs:
         with:
           java-version: ${{ inputs.java-version }}
           distribution: 'temurin'
+          cache: 'maven'
       - uses: s4u/maven-settings-action@v3.0.0
         with:
           servers: |

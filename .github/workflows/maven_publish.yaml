@@ -36,7 +36,7 @@ jobs:
       - name: Deploy to Github Package
         run: |
           echo "Release package with version ${{ inputs.version }}"
-          mvn source:jar-no-fork deploy -DskipTests=true -Dmaven.wagon.http.pool=false -DdeployAtEnd=true
+          mvn source:jar-no-fork deploy -Dmaven.test.skip=true -T 1C -Dmaven.wagon.http.pool=false -DdeployAtEnd=true
       - id: generate_outputs
         run: |
           echo "published=true" >> $GITHUB_OUTPUT

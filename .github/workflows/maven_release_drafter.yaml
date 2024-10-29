@@ -37,7 +37,7 @@ jobs:
         run: mvn -B -q -fae -Dmaven.test.skip=true package dependency:resolve-plugins dependency:go-offline
 
       - name: Build (and run tests)
-        run: mvn -B -q -fae clean install
+        run: mvn -B -q -fae -Dparallel=all -DperCoreThreadCount=true clean install
 
       - name: Save test results
         run: |

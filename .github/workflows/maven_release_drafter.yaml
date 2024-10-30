@@ -35,7 +35,7 @@ jobs:
           server-id: github
 
       - name: Build (and run tests)
-        run: mvn -B -q -fae -Dparallel=all -DperCoreThreadCount=true clean install
+        run: mvn -B -q -fae -Dparallel=all -DperCoreThreadCount=true -T 4C clean install
 
       - name: Save test results
         run: |

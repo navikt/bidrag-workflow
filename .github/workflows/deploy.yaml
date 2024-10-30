@@ -102,10 +102,10 @@ jobs:
             ]
       - name: Bygg uten test
         if: ${{ inputs.produksjon == false }}
-        run: mvn -Dmaven.test.skip=true ${{ inputs.maven_options }} clean install
+        run: mvn -Dmaven.test.skip=true ${{ inputs.maven_options }} -Dparallel=all -DperCoreThreadCount=true clean install
       - name: Bygg med test
         if: ${{ inputs.produksjon == true }}
-        run: mvn ${{ inputs.maven_options }} clean install
+        run: mvn ${{ inputs.maven_options }} -Dparallel=all -DperCoreThreadCount=true clean install
       - uses: nais/docker-build-push@v0
         if: github.actor != 'dependabot[bot]'
         id: docker-push

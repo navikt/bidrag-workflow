@@ -33,8 +33,6 @@ jobs:
           server-password: GITHUB_TOKEN
           server-username: GITHUB_USERNAME
           server-id: github
-      - name: Resolve/Update Dependencies
-        run: mvn -B -q -fae -Dmaven.test.skip=true package dependency:resolve-plugins dependency:go-offline
 
       - name: Build (and run tests)
         run: mvn -B -q -fae -Dparallel=all -DperCoreThreadCount=true clean install

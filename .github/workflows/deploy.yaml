@@ -102,10 +102,10 @@ jobs:
             ]
       - name: Bygg uten test
         if: ${{ inputs.produksjon == false }}
-        run: mvn -Dmaven.test.skip=true ${{ inputs.maven_options }} -Dparallel=all -DperCoreThreadCount=true -T 4C clean install
+        run: mvn -Dmaven.test.skip=true ${{ inputs.maven_options }} -Dparallel=all -DperCoreThreadCount=true -DthreadCount=10 clean install
       - name: Bygg med test
         if: ${{ inputs.produksjon == true }}
-        run: mvn ${{ inputs.maven_options }} -Dparallel=all -DperCoreThreadCount=true -T 4C clean install
+        run: mvn ${{ inputs.maven_options }} -Dparallel=all -DperCoreThreadCount=true clean install
       - uses: nais/docker-build-push@v0
         if: github.actor != 'dependabot[bot]'
         id: docker-push
@@ -150,7 +150,7 @@ jobs:
                 "password": "${{secrets.GITHUB_TOKEN}}"
               }
             ]
-      - run: mvn ${{ inputs.maven_options }} ${{ inputs.maven_test_lifecycle }} -Dparallel=all -DperCoreThreadCount=true -T 4C
+      - run: mvn ${{ inputs.maven_options }} ${{ inputs.maven_test_lifecycle }} -Dparallel=all -DperCoreThreadCount=true
 
   run-ktlint:
     runs-on: ubuntu-latest
@@ -178,7 +178,7 @@ jobs:
                 "password": "${{secrets.GITHUB_TOKEN}}"
               }
             ]
-      - run: mvn antrun:run@ktlint ${{ inputs.ktlint_options }} -Dparallel=all -DperCoreThreadCount=true -T 4C
+      - run: mvn antrun:run@ktlint ${{ inputs.ktlint_options }} -Dparallel=all -DperCoreThreadCount=true
 
   deploy:
     runs-on: ubuntu-latest

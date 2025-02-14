@@ -137,9 +137,10 @@ jobs:
       id-token: "write"
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
-          name: buildfiles
+          pattern: buildfiles
+          merge-multiple: true
           path: ${{ inputs.image_suffix }}
       - run: ls ${{ inputs.image_suffix }}
       - uses: nais/docker-build-push@v0

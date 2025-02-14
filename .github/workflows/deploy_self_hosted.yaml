@@ -95,12 +95,14 @@ jobs:
           name: buildfiles
           path: ./target/app.jar
           retention-days: 1
+          overwrite: true
       - uses: actions/upload-artifact@v4
         if: github.actor != 'dependabot[bot]' && ${{ inputs.image_suffix != '' }}
         with:
           name: buildfiles
           path: ./${{ inputs.image_suffix }}/target/app.jar
           retention-days: 1
+          overwrite: true
 
   run-tests:
     name: Kjør tester

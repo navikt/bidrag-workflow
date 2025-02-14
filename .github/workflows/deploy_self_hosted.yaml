@@ -89,13 +89,13 @@ jobs:
       - name: Rename jar file multimodule
         if: ${{ inputs.image_suffix != '' }}
         run: cp ./${{ inputs.image_suffix }}/target/${{ inputs.image_suffix }}*.jar ./${{ inputs.image_suffix }}/target/app.jar
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         if: github.actor != 'dependabot[bot]' && ${{ inputs.image_suffix == '' }}
         with:
           name: buildfiles
           path: ./target/app.jar
           retention-days: 1
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         if: github.actor != 'dependabot[bot]' && ${{ inputs.image_suffix != '' }}
         with:
           name: buildfiles

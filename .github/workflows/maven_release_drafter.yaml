@@ -68,7 +68,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: release-drafter/release-drafter@v5
+      - uses: release-drafter/release-drafter@v6
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -88,7 +88,7 @@ jobs:
           export VERSION=${GIT_COMMIT_DATE}
           echo "VERSION=${GIT_COMMIT_DATE}" >> $GITHUB_ENV
           echo "Setting version $VERSION"
-      - uses: release-drafter/release-drafter@v5
+      - uses: release-drafter/release-drafter@v6
         with:
           version: ${{ env.VERSION }}
           tag: ${{ env.VERSION }}

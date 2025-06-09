@@ -180,6 +180,6 @@ jobs:
       if: ${{ always() }}
       needs: deploy
       steps:
-        - uses: geekyeggo/delete-artifact@v4
+        - uses: geekyeggo/delete-artifact@v5
           with:
             name: buildfiles

@@ -44,6 +44,11 @@ on:
         required: false
         type: string
         description: Custom docker tag
+      slett_artifact:
+        required: false
+        type: boolean
+        default: true
+        description: Om det skal slettes opplastede artifact etter deploy
     outputs:
       deploy_suksess:
         description: "Om deploy har gått gjennom OK"
@@ -177,7 +182,7 @@ jobs:
   delete_artifacts:
       runs-on: ubuntu-latest
       name: Delete uploaded artifacts
-      if: ${{ always() }}
+      if: ${{ inputs.slett_artifact }}
       needs: deploy
       steps:
         - uses: geekyeggo/delete-artifact@v4

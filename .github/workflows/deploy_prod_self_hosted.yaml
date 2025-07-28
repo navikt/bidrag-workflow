@@ -39,6 +39,11 @@ on:
         required: false
         type: string
         description: Custom docker tag
+      slett_artifact:
+        required: false
+        type: boolean
+        default: true
+        description: Om det skal slettes opplastede artifact etter deploy
     outputs:
       image:
         description: "Docker Image navnet som blir deployet til miljø"
@@ -66,7 +71,7 @@ jobs:
   tag:
     name: "Tag release"
     needs: build_and_deploy
-    if: ${{ always() && needs.build_and_deploy.outputs.deploy_suksess == 'true' }}
+    if: ${{ inputs.slett_artifact && needs.build_and_deploy.outputs.deploy_suksess == 'true' }}
     uses: ./.github/workflows/tag_release.yaml
     with:
       tag: ${{ needs.build_and_deploy.outputs.tag }}

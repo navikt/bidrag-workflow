@@ -66,12 +66,13 @@ jobs:
       docker_context: ${{ inputs.docker_context }}
       image_suffix: ${{ inputs.image_suffix }}
       tag: ${{ inputs.tag }}
+      slett_artifact: ${{ inputs.slett_artifact }}
     secrets: inherit
 
   tag:
     name: "Tag release"
     needs: build_and_deploy
-    if: ${{ inputs.slett_artifact && needs.build_and_deploy.outputs.deploy_suksess == 'true' }}
+    if: ${{ always() && needs.build_and_deploy.outputs.deploy_suksess == 'true' }}
     uses: ./.github/workflows/tag_release.yaml
     with:
       tag: ${{ needs.build_and_deploy.outputs.tag }}

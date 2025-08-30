@@ -74,7 +74,6 @@ jobs:
 
   update_release_draft:
     needs: build-artifact
-    if: github.ref == 'refs/heads/main'
     permissions:
       contents: write
       pull-requests: write
@@ -88,14 +87,14 @@ jobs:
           export VERSION=${GIT_COMMIT_DATE}
           echo "VERSION=${GIT_COMMIT_DATE}" >> $GITHUB_ENV
           echo "Setting version $VERSION"
-      - uses: release-drafter/release-drafter@v5
-        with:
-          version: ${{ env.VERSION }}
-          tag: ${{ env.VERSION }}
-          name: "Release ${{ env.VERSION }}"
-          publish: ${{ env.publish }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#      - uses: release-drafter/release-drafter@v5
+#        with:
+#          version: ${{ env.VERSION }}
+#          tag: ${{ env.VERSION }}
+#          name: "Release ${{ env.VERSION }}"
+#          publish: ${{ env.publish }}
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     outputs:
       version: ${{ env.VERSION }}
       published: ${{ env.publish == true }}

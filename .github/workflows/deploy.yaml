@@ -150,7 +150,7 @@ jobs:
         id: attest-sign
         uses: nais/attest-sign@v1
         with:
-          image_ref: ${{ steps.login.outputs.registry }}/${{ steps.setup.outputs.REPO_NAME }}@${{ needs.build.outputs.digest }}
+          image_ref: ${{ steps.login.outputs.registry }}/${{ steps.setup.outputs.REPO_NAME }}@${{ steps.build.outputs.digest }}
     outputs:
         description: "SBOM.json in cyclonedx format"
         value: ${{ steps.attest-sign.outputs.sbom }}

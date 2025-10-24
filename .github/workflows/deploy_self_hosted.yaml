@@ -157,7 +157,7 @@ jobs:
     outputs:
       image: ${{ steps.docker-push.outputs.image }}
       tag: ${{ steps.docker-push.outputs.tag }}
-
+      digest: ${{ steps.docker-push.outputs.digest }}
 
   salsa:
     name: Generate SBOM, attest and sign image

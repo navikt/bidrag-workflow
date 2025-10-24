@@ -161,7 +161,7 @@ jobs:
 
   salsa:
     name: Generate SBOM, attest and sign image
-    needs: [ build ]
+    needs: [ publish_to_docker ]
     runs-on: ubuntu-latest
     permissions:
       id-token: "write"
@@ -185,7 +185,7 @@ jobs:
         id: attest-sign
         uses: nais/attest-sign@v1
         with:
-          image_ref: ${{ steps.login.outputs.registry }}/${{ steps.setup.outputs.REPO_NAME }}@${{ needs.build.outputs.digest }}
+          image_ref: ${{ steps.login.outputs.registry }}/${{ steps.setup.outputs.REPO_NAME }}@${{ needs.publish_to_docker.outputs.digest }}
     outputs:
       description: "SBOM.json in cyclonedx format"
       value: ${{ steps.attest-sign.outputs.sbom }}

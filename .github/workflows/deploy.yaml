@@ -70,9 +70,9 @@ on:
         description: "Docker tag som blir deployet til miljø"
         value: ${{ jobs.build.outputs.tag }}
 env:
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  GITHUB_TOKEN: ${{ secrets.READER_TOKEN }}
   CLUSTER: ${{ inputs.produksjon && 'prod' || 'dev' }}-${{ inputs.nais_cluster }}
-  ACTIONS_RUNTIME_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  ACTIONS_RUNTIME_TOKEN: ${{ secrets.READER_TOKEN }}
 
 jobs:
   build:
@@ -92,12 +92,12 @@ jobs:
               {
                 "id": "github",
                 "username": "x-access-token", 
-                "password": "${{secrets.GITHUB_TOKEN}}"
+                "password": "${{secrets.READER_TOKEN}}"
               },
               {
                 "id": "github2",
                 "username": "x-access-token", 
-                "password": "${{secrets.GITHUB_TOKEN}}"
+                "password": "${{secrets.READER_TOKEN}}"
               }
             ]
       - name: Bygg uten test
@@ -175,12 +175,12 @@ jobs:
               {
                 "id": "github",
                 "username": "x-access-token", 
-                "password": "${{secrets.GITHUB_TOKEN}}"
+                "password": "${{secrets.READER_TOKEN}}"
               },
               {
                 "id": "github2",
                 "username": "x-access-token", 
-                "password": "${{secrets.GITHUB_TOKEN}}"
+                "password": "${{secrets.READER_TOKEN}}"
               }
             ]
       - run: mvn ${{ inputs.maven_options }} ${{ inputs.maven_test_lifecycle }} -Dparallel=all -DperCoreThreadCount=true
@@ -203,12 +203,12 @@ jobs:
               {
                 "id": "github",
                 "username": "x-access-token", 
-                "password": "${{secrets.GITHUB_TOKEN}}"
+                "password": "${{secrets.READER_TOKEN}}"
               },
               {
                 "id": "github2",
                 "username": "x-access-token", 
-                "password": "${{secrets.GITHUB_TOKEN}}"
+                "password": "${{secrets.READER_TOKEN}}"
               }
             ]
       - run: mvn antrun:run@ktlint ${{ inputs.ktlint_options }} -Dparallel=all -DperCoreThreadCount=true

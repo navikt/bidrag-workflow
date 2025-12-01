@@ -17,7 +17,7 @@ on:
         type: string
         description: Release tag som skal deployes. Som default vil forrige tag bli deployet
 env:
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  GITHUB_TOKEN: ${{ secrets.READER_TOKEN }}
   CLUSTER: prod-${{ inputs.cluster }}
 
 jobs:

@@ -60,10 +60,10 @@ on:
         description: "Docker tag som blir deployet til miljø"
         value: ${{ jobs.publish_to_docker.outputs.tag }}
 env:
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  GITHUB_TOKEN: ${{ secrets.READER_TOKEN }}
   CLUSTER: ${{ inputs.produksjon && 'prod-fss' || 'dev-fss' }}
   ENV_FILE_NAME: ${{ inputs.nais_variabler_filnavn }}
-  ACTIONS_RUNTIME_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  ACTIONS_RUNTIME_TOKEN: ${{ secrets.READER_TOKEN }}
 
 jobs:
   build:

@@ -22,6 +22,11 @@ on:
         type: string
         default: -B -q -fae
         description: Ekstra options ved kjøring av maven bygget. Dette kan være lag eller profiler. Default -B (Batchmode, non-interactive), -q (Quiet, kun logging ved errors), -fae (Fail at end).
+      maven_test_lifecycle:
+        required: false
+        type: string
+        default: test
+        description: Mulighet for å endre hvilken maven lifecycle som kjøres sammen med testene. For å kunne kjøre integrasjonstester må verify/install/deploy brukes.
       ktlint_options:
         required: false
         type: string
@@ -113,7 +118,7 @@ jobs:
           export MAVEN_HOME=/opt/apache-maven-3.9.9
           export MAVEN_BIN=$MAVEN_HOME/bin
           export PATH=$MAVEN_BIN:$PATH
-          mvn ${{ inputs.maven_options }} test
+          mvn ${{ inputs.maven_options }} ${{ inputs.maven_test_lifecycle }}
 
   run-ktlint:
     name: Verifiser formatering med ktlint

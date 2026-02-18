@@ -75,7 +75,6 @@ jobs:
     name: Bygg med maven
     runs-on: self-hosted
     steps:
-      - run: sudo rm -rf *
       - uses: actions/checkout@v4
       - name: Bygg uten test
         if: ${{ inputs.produksjon == false }}

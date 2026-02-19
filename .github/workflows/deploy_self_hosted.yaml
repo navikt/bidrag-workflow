@@ -75,6 +75,11 @@ jobs:
     name: Bygg med maven
     runs-on: self-hosted
     steps:
+      - name: Reset working directory
+        run: |
+          ls -la ./
+          rm -rf ./* || true
+          rm -rf ./.??* || true
       - uses: actions/checkout@v4
       - name: Bygg uten test
         if: ${{ inputs.produksjon == false }}

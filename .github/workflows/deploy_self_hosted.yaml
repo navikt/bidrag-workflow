@@ -73,7 +73,7 @@ env:
 jobs:
   reset_working_directory:
     name: Reset runner working directory
-    runs-on: self-hosted
+    runs-on: [self-hosted, java-25]
     steps:
       - name: Reset working directory
         run: |
@@ -82,7 +82,7 @@ jobs:
           rm -rf ./.??* || true
   build:
     name: Bygg med maven
-    runs-on: self-hosted
+    runs-on: [self-hosted, java-25]
     needs: [ reset_working_directory ]
     steps:
       - uses: actions/checkout@v4
@@ -111,7 +111,7 @@ jobs:
   run-tests:
     name: Kjør tester
     if: ${{ inputs.produksjon == false }}
-    runs-on: self-hosted
+    runs-on: [self-hosted, java-25]
     needs: [ reset_working_directory ]
     steps:
       - uses: actions/checkout@v4
@@ -121,7 +121,7 @@ jobs:
   run-ktlint:
     name: Verifiser formatering med ktlint
     if: ${{ inputs.produksjon == false }}
-    runs-on: self-hosted
+    runs-on: [self-hosted, java-25]
     needs: [ reset_working_directory ]
     steps:
       - uses: actions/checkout@v4

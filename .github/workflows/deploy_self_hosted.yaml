@@ -75,22 +75,19 @@ jobs:
     name: Bygg med maven
     runs-on: self-hosted
     steps:
+      - name: Reset working directory
+        run: |
+          ls -la ./
+          rm -rf ./* || true
+          rm -rf ./.??* || true
       - uses: actions/checkout@v4
       - name: Bygg uten test
         if: ${{ inputs.produksjon == false }}
         run: |
-          export JAVA_HOME=/home/githubrunner/java-21
-          export MAVEN_HOME=/opt/apache-maven-3.9.9
-          export MAVEN_BIN=$MAVEN_HOME/bin
-          export PATH=$MAVEN_BIN:$PATH
           mvn -Dmaven.test.skip=true ${{ inputs.maven_options }} clean install
       - name: Bygg med test
         if: ${{ inputs.produksjon == true }}
         run: |
-          export JAVA_HOME=/home/githubrunner/java-21
-          export MAVEN_HOME=/opt/apache-maven-3.9.9
-          export MAVEN_BIN=$MAVEN_HOME/bin
-          export PATH=$MAVEN_BIN:$PATH
           mvn ${{ inputs.maven_options }} clean install
       - name: Rename jar file
         if: ${{ inputs.image_suffix == '' }}
@@ -113,10 +110,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: |
-          export JAVA_HOME=/home/githubrunner/java-21
-          export MAVEN_HOME=/opt/apache-maven-3.9.9
-          export MAVEN_BIN=$MAVEN_HOME/bin
-          export PATH=$MAVEN_BIN:$PATH
           mvn ${{ inputs.maven_options }} ${{ inputs.maven_test_lifecycle }}
 
   run-ktlint:
@@ -126,7 +119,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: |
-          export JAVA_HOME=/home/githubrunner/java-21
           mvn antrun:run@ktlint ${{ inputs.ktlint_options }}
 
   publish_to_docker:

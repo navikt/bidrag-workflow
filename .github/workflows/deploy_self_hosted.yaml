@@ -80,6 +80,10 @@ jobs:
           ls -la ./
           rm -rf ./* || true
           rm -rf ./.??* || true
+          export JAVA_HOME=/home/githubrunner/java-21
+          export MAVEN_HOME=/opt/apache-maven-3.9.9
+          export MAVEN_BIN=$MAVEN_HOME/bin
+          export PATH=$MAVEN_BIN:$PATH
   build:
     name: Bygg med maven
     runs-on: [self-hosted, java-25]

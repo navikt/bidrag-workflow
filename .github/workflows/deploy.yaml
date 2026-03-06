@@ -155,7 +155,6 @@ jobs:
     outputs:
         description: "SBOM.json in cyclonedx format"
         value: ${{ steps.attest-sign.outputs.sbom }}
-        value: ${{ steps.attest-sign.outputs.sbom }}
 
   run-tests:
     runs-on: ubuntu-latest

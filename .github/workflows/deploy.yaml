@@ -72,7 +72,6 @@ on:
 env:
   GITHUB_TOKEN: ${{ secrets.READER_TOKEN }}
   CLUSTER: ${{ inputs.produksjon && 'prod' || 'dev' }}-${{ inputs.nais_cluster }}
-  ACTIONS_RUNTIME_TOKEN: ${{ secrets.READER_TOKEN }}
 
 jobs:
   build:
@@ -155,6 +154,7 @@ jobs:
           image_ref: ${{ steps.login.outputs.registry }}/${{ steps.setup.outputs.REPO_NAME }}@${{ needs.build.outputs.digest }}
     outputs:
         description: "SBOM.json in cyclonedx format"
+        value: ${{ steps.attest-sign.outputs.sbom }}
         value: ${{ steps.attest-sign.outputs.sbom }}
 
   run-tests:

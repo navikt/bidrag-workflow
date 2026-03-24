@@ -161,13 +161,13 @@ jobs:
     name: Kjør tester
     if: ${{ inputs.produksjon == false }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
+      - uses: actions/checkout@v6
+      - uses: actions/setup-java@v5
         with:
           java-version: ${{ inputs.java-version }}
           distribution: 'temurin'
           cache: 'maven'
-      - uses: s4u/maven-settings-action@v3.0.0
+      - uses: s4u/maven-settings-action@v4.0.0
         with:
           servers: |
             [
@@ -189,13 +189,13 @@ jobs:
     name: Verifiser formatering med ktlint
     if: ${{ inputs.produksjon == false }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
+      - uses: actions/checkout@v6
+      - uses: actions/setup-java@v5
         with:
           java-version: ${{ inputs.java-version }}
           distribution: 'temurin'
           cache: 'maven'
-      - uses: s4u/maven-settings-action@v3.0.0
+      - uses: s4u/maven-settings-action@v4.0.0
         with:
           servers: |
             [
@@ -219,7 +219,7 @@ jobs:
     needs: build
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           path: deploy
       - name: Deploy to ${{ env.CLUSTER }} with ${{ inputs.nais_variabler_filnavn }}

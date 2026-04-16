@@ -19,7 +19,7 @@ on:
         description: "Versjon på pakken som ble publisert"
         value: ${{ jobs.publish.outputs.version }}
 env:
-  publish: ${{github.ref == 'refs/heads/main' && !startsWith(github.ref, 'refs/dependabot')}}
+  publish: ${{ inputs.publish }}
   GITHUB_USERNAME: x-access-token
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -65,7 +65,7 @@ jobs:
           GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
   update_release_draft_labels:
-    if: github.ref != 'refs/heads/main'
+    if: ${{ !inputs.publish }}
     permissions:
       contents: write
       pull-requests: write
@@ -78,7 +78,7 @@ jobs:
 
   update_release_draft:
     needs: build-artifact
-    if: github.ref == 'refs/heads/main'
+    if: ${{ inputs.publish }}
     permissions:
       contents: write
       pull-requests: write

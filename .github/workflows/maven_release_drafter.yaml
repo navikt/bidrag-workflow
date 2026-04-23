@@ -99,7 +99,6 @@ jobs:
           tag: ${{ env.VERSION }}
           name: "Release ${{ env.VERSION }}"
           publish: ${{ env.publish }}
-          commitish: ${{ github.head_ref || github.ref_name }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     outputs:
